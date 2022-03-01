@@ -1,0 +1,44 @@
+public class ElementCreation
+{
+	public void insertAccountAndBill(string accountName,string email,double amount)
+    {
+         //instantiate CodeFormat obj
+        CodeFormat   cf= new CodeFormat();
+        
+        //we Create new OM_Account__c record 
+        OM_Account__c newAccount = new OM_Account__c(Name=accountName);
+        //we insert 
+        insert newAccount;
+        
+        //we Create new Bill__c record 
+        Bill__c newBill = new Bill__c(
+            						  OM_Amount__c=amount,
+                                      EmailBill__c=email,
+                                      OM_Account__c=newAccount.Id
+                                     );
+        
+        //we format the code field        
+        newBill.OM_CODE__c=cf.setFormat(cf.setIntFormat(amount),8); 
+        
+        //we insert 
+        insert newBill;
+    }
+    
+    public Boolean insertCall(Bill__c bill)
+    {
+        if(bill.Id!=null)
+        {
+         //we create new call record
+         OM_Call__c callTask= new OM_Call__c(Name='Call '+bill.Name,
+                                             Account__c=bill.OM_Account__c,
+                                             Bill__c=bill.Id);
+        //and we insert
+         insert callTask;
+        
+         System.debug('Call has been inserted');   
+         return true;
+            
+        }
+        return false;
+    }
+}

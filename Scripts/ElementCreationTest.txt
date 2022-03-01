@@ -1,0 +1,34 @@
+@isTest
+public class ElementCreationTest
+{
+
+     @isTest static void insertCallSuccess()
+     {
+        ElementCreation eC= new ElementCreation();
+        OM_Account__c account = new OM_Account__c(Name='newAccount');
+        insert account;
+         
+        Bill__c bill = new Bill__c(Name='newBill',OM_Account__c=account.Id,
+                                   OM_Amount__c=400,EmailBill__c='johnandrey@hotmail.es');
+        insert bill;
+        
+        Boolean check = eC.insertCall(bill);
+        System.assertEquals(true,check);
+    }
+    
+     @isTest static void insertCallFailure()
+     {
+        ElementCreation eC= new ElementCreation();
+         
+        OM_Account__c account = new OM_Account__c(Name='newAccount');
+        insert account;
+         
+        Bill__c bill = new Bill__c(Name='newBill',OM_Account__c=account.Id,
+                                   OM_Amount__c=400,EmailBill__c='johnandrey@hotmail.es');
+        
+        Boolean check = eC.insertCall(bill);
+        System.assertEquals(true,check,'-Bill objet is not valid-');
+    }
+
+    
+  

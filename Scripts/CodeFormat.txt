@@ -1,0 +1,29 @@
+public class CodeFormat
+{
+	//This method put zeros on the left string part
+    //and return the new format
+    public String setFormat(String str, Integer maxLong) 
+	{
+        String ceros = '';
+        
+        Integer amount = maxLong - str.length();
+        
+        if (amount >= 1)
+        {
+            for(Integer i=0;i<amount;i++)
+            {
+                ceros +='0';
+            }
+            
+            return 'F'+(ceros + str);
+        }
+        else return 'F'+str;
+	}
+    
+    //We Change double parameter in String with Integer format
+    public string setIntFormat(Double dbl)
+    {
+        Integer amountFormated = (Integer)dbl;
+        return amountFormated+'';        
+    }
+}

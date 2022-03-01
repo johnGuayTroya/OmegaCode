@@ -1,0 +1,29 @@
+//Cuando se cambie el valor de una factura se desea enviar un email (texto plano) a 
+//la dirección de email de la cuenta relacionada con la factura.
+trigger SendEmailTrigger on Bill__c (before update)
+{
+ if(Trigger.isUpdate)
+    {
+       //get actualBill before update
+        Bill__c bill =  Trigger.New[0];
+       
+        //we call our clases
+        EmailManager    em= new EmailManager();
+        CodeFormat      cf= new CodeFormat();
+        ElementCreation eC= new ElementCreation();
+        
+        //we format the code field
+        Integer amountFormated = (Integer)bill.OM_Amount__c;
+        string amountS= amountFormated+''; 
+        
+        em.sendMail(bill.EmailBill__c, 'Bill '+bill.Name+' has been updated', 
+                    'Your bill amount: '+bill.OM_Amount__c+'€\n'
+                    +'Code Bill :'+cf.setFormat(amountS,8)); 
+        
+        //Insertar un registro tarea (Task) de tipo ‘Call’ que esté relacionada con la cuenta y 
+		// con la factura. 
+        
+        ec.insertCall(bill);
+         
+    }
+}
